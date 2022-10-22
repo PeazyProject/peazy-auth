@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>laas-auth</name>
-	<comment>Project laas-auth created by Buildship.</comment>
+	<name>peazy-auth</name>
+	<comment>Project peazy-auth created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

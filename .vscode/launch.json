@@ -2,11 +2,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-AuthApplication<laas-auth>",
+            "name": "Spring Boot-AuthApplication<peazy-auth>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.laas.auth.AuthApplication",
-            "projectName": "laas-auth",
+            "mainClass": "com.peazy.auth.AuthApplication",
+            "projectName": "peazy-auth",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
