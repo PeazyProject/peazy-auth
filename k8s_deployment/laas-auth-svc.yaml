@@ -1,0 +1,16 @@
+#---------------- Peer0 Org1 Service ---------------
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: laas-auth
+  name: laas-auth
+  namespace: laas-auth
+spec:
+  type: LoadBalancer
+  ports:
+  - name: laas-auth
+    port: 80
+    targetPort: 8080
+  selector:
+    app: laas-auth
