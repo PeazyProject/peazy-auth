@@ -15,5 +15,5 @@ ARG connectionString
 ADD ./build/libs/peazy-auth-0.0.1-SNAPSHOT.jar app.jar
 ADD https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.0.1/applicationinsights-agent-3.0.1.jar applicationinsights-agent-3.0.1.jar
 # RUN echo '{"connectionString":"'$connectionString'"}' > applicationinsights.json
-ENTRYPOINT ["java", "-Xmx2048m", "-Xms128m",  "-javaagent:./applicationinsights-agent-3.0.1.jar","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+# ENTRYPOINT ["java", "-Xmx2048m", "-Xms128m",  "-javaagent:./applicationinsights-agent-3.0.1.jar","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
