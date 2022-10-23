@@ -18,7 +18,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.peazy.auth.model.args.ChangePasswordRequest;
 import com.peazy.auth.model.args.QueryUserRequest;
 import com.peazy.auth.model.dto.QueryUserDto;
-import com.peazy.auth.service.interfaces.UserService;
+import com.peazy.auth.service.interfaces.CustomerUserService;
+import com.peazy.auth.service.interfaces.SupplierUserService;
 
 @CrossOrigin
 @RestController
@@ -27,18 +28,27 @@ public class UserController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private UserService userService;
+	private CustomerUserService customerUserService;
 
-	@PostMapping(value = "/getUsers")
-	public ResponseEntity<List<QueryUserDto>> getUsers(@RequestBody QueryUserRequest model) throws JsonProcessingException {
-		List<QueryUserDto> result = userService.getUsers(model);
+	@Autowired
+	private SupplierUserService supplierUserService;
+
+	@PostMapping(value = "/getCustomerUsers")
+	public ResponseEntity<List<QueryUserDto>> getCustomerUsers(@RequestBody QueryUserRequest model) throws JsonProcessingException {
+		List<QueryUserDto> result = customerUserService.getUsers(model);
 		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping(value = "/changePassword")
 	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest model) {
-		userService.changePassword(model);
+		customerUserService.changePassword(model);
 		return ResponseEntity.ok(null);
+	}
+
+	@PostMapping(value = "/getSupplierUsers")
+	public ResponseEntity<List<QueryUserDto>> getSupplierUsers(@RequestBody QueryUserRequest model) throws JsonProcessingException {
+		List<QueryUserDto> result = supplierUserService.getUsers(model);
+		return ResponseEntity.ok(result);
 	}
 
 }

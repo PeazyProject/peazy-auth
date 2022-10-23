@@ -13,15 +13,15 @@ import org.hibernate.annotations.GenericGenerator;
 import lombok.Data;
 
 @Entity
-@Table(name = "Auth_CustomerUser", schema = "alanlee")
+@Table(name = "Auth_SupplierUser", schema = "alanlee")
 @Data
-public class UserEntity {
+public class SupplierUserEntity {
 
 	@Id
     // @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     // @GeneratedValue(generator = "system-uuid")
 	
-	@Column(name = "userUUid", unique = true, nullable = false)
+	@Column(name = "UserUUID", unique = true, nullable = false)
 	private String userUUid;
 	private String userAccount;
 	private String userName;

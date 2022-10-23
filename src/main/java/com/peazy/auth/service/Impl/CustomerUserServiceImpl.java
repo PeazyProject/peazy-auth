@@ -10,27 +10,27 @@ import com.peazy.auth.exception.ErrorCodeException;
 import com.peazy.auth.model.args.ChangePasswordRequest;
 import com.peazy.auth.model.args.QueryUserRequest;
 import com.peazy.auth.model.dto.QueryUserDto;
-import com.peazy.auth.model.entity.UserEntity;
-import com.peazy.auth.repository.UserRepository;
-import com.peazy.auth.service.interfaces.UserService;
+import com.peazy.auth.model.entity.CustomerUserEntity;
+import com.peazy.auth.repository.CustomerUserRepository;
+import com.peazy.auth.service.interfaces.CustomerUserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class CustomerUserServiceImpl implements CustomerUserService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private CustomerUserRepository customerUserRepository;
 
 	@Override
 	public List<QueryUserDto> getUsers(QueryUserRequest model) throws JsonProcessingException {
 		List<QueryUserDto> result = null;
-		List<UserEntity> userEntities = userRepository.findAll();
+		List<CustomerUserEntity> userEntities = customerUserRepository.findAll();
 		System.out.println("LOOK userEntities = " + userEntities);
 		return result;
 	}
 
 	@Override
 	public void changePassword(ChangePasswordRequest model) {
-		UserEntity userEntity = userRepository.findByuserUUid(model.getUuid()).orElse(null);
+		CustomerUserEntity userEntity = customerUserRepository.findByuserUUid(model.getUuid()).orElse(null);
 
 		if (userEntity != null) {
 			// boolean isSame = bcryptEncoder.matches(model.getOldPassword(), userEntity.getUserPassword());
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 			// userEntity.setUserPassword(bcryptEncoder.encode(model.getNewPassword()));
 			// userEntity.setUpdateDt(new Date());
 			userEntity.setUpdateUser(model.getLoginAccount());
-			userRepository.save(userEntity);
+			customerUserRepository.save(userEntity);
 
 		} else {
 			throw new ErrorCodeException(UserErrorCodeEnumImpl.USER_NOT_FOUND);
