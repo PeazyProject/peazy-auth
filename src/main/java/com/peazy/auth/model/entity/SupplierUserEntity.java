@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 import lombok.Data;
 
 @Entity
-@Table(name = "Auth_SupplierUser", schema = "alanlee")
+@Table(name = "SupplierUser", schema = "alanlee")
 @Data
 public class SupplierUserEntity {
 
@@ -27,14 +27,8 @@ public class SupplierUserEntity {
 	private String userName;
 	private String userPassword;
 	private String userEmail;
-	private String userPhoneNumber;
-	private String userStoreName;
-	private String userAddress;
-	private String loginErrorCnt;
-	private String activatedStatus;
-	private String isFinishWholesale;
-	private String isPaidDeposit;
-	private Date LastLoginDt;
+	private String isActivited;
+	private String userType;
 	private String createUser;
 	private Date createDt;
 	private String updateUser;
