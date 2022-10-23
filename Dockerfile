@@ -20,8 +20,17 @@
 # RUN echo '{"connectionString":"'$connectionString'"}' > applicationinsights.json
 # ENTRYPOINT ["java", "-Xmx2048m", "-Xms128m",  "-javaagent:./applicationinsights-agent-3.0.1.jar","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
-FROM openjdk:11
-# COPY ./target/*.jar /Desktop/PEazy/Project/peazy-auth.jar
-# WORKDIR /Desktop/PEazy/Project
-RUN sh -c 'touch peazy-auth.jar'
-ENTRYPOINT ["java","-jar","peazy-auth.jar"]
+## Error: Invalid or corrupt jarfile peazy-auth.jar
+# FROM openjdk:11
+# # COPY ./target/*.jar /Desktop/PEazy/Project/peazy-auth.jar
+# # WORKDIR /Desktop/PEazy/Project
+# RUN sh -c 'touch peazy-auth.jar'
+# ENTRYPOINT ["java","-jar","peazy-auth.jar"]
+
+FROM gradle:6-jdk11
+COPY ./ ./
+RUN gradle build -x test
+ARG SAMPLE_FOLDER
+ARG CHANNEL_TOKEN
+ARG CHANNEL_SECRET
+CMD java -Dline.bot.channelToken=${CHANNEL_TOKEN} -Dline.bot.channelSecret=${CHANNEL_SECRET} -jar ./${SAMPLE_FOLDER}/build/libs/${SAMPLE_FOLDER}-*-SNAPSHOT.jar
