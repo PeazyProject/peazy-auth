@@ -33,4 +33,4 @@ RUN gradle build -x test
 ARG SAMPLE_FOLDER
 ARG CHANNEL_TOKEN
 ARG CHANNEL_SECRET
-CMD java -Dline.bot.channelToken=${CHANNEL_TOKEN} -Dline.bot.channelSecret=${CHANNEL_SECRET} -jar ./${SAMPLE_FOLDER}/build/libs/${SAMPLE_FOLDER}-*-SNAPSHOT.jar
+CMD java -Dline.bot.channelToken=${CHANNEL_TOKEN} -Dline.bot.channelSecret=${CHANNEL_SECRET} -jar ./build/libs/peazy-auth-0.0.1-SNAPSHOT.jar app.jar
