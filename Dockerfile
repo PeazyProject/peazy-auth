@@ -29,6 +29,6 @@
 
 FROM gradle:6-jdk11
 COPY ./ ./
-RUN gradlew build -x test
+RUN gradle build -x test
 CMD java -jar ./build/libs/peazy-auth-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
