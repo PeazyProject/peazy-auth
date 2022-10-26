@@ -18,6 +18,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.peazy.auth.model.args.ChangePasswordRequest;
 import com.peazy.auth.model.args.QueryUserRequest;
 import com.peazy.auth.model.dto.QueryUserDto;
+import com.peazy.auth.model.entity.CustomerUserEntity;
+import com.peazy.auth.model.entity.SupplierUserEntity;
 import com.peazy.auth.service.interfaces.CustomerUserService;
 import com.peazy.auth.service.interfaces.SupplierUserService;
 
@@ -34,21 +36,15 @@ public class UserController {
 	private SupplierUserService supplierUserService;
 
 	@PostMapping(value = "/getCustomerUsers")
-	public ResponseEntity<List<QueryUserDto>> getCustomerUsers(@RequestBody QueryUserRequest model) throws JsonProcessingException {
-		List<QueryUserDto> result = customerUserService.getUsers(model);
-		return ResponseEntity.ok(result);
-	}
-	
-	@PostMapping(value = "/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest model) {
-		customerUserService.changePassword(model);
-		return ResponseEntity.ok(null);
+	public ResponseEntity<List<CustomerUserEntity>> getCustomerUsers() throws JsonProcessingException {
+		List<CustomerUserEntity> customerUserList = customerUserService.getUsers();
+		return ResponseEntity.ok(customerUserList);
 	}
 
 	@PostMapping(value = "/getSupplierUsers")
-	public ResponseEntity<List<QueryUserDto>> getSupplierUsers(@RequestBody QueryUserRequest model) throws JsonProcessingException {
-		List<QueryUserDto> result = supplierUserService.getUsers(model);
-		return ResponseEntity.ok(result);
+	public ResponseEntity<List<SupplierUserEntity>> getSupplierUsers() throws JsonProcessingException {
+		List<SupplierUserEntity> supplierUserList = supplierUserService.getUsers();
+		return ResponseEntity.ok(supplierUserList);
 	}
 
 }

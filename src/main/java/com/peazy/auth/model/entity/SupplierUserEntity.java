@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 import lombok.Data;
 
 @Entity
-@Table(name = "SupplierUser", schema = "alanlee")
+@Table(name = "Auth_SupplierUser", schema = "alanlee")
 @Data
 public class SupplierUserEntity {
 
