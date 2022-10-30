@@ -16,11 +16,9 @@ import lombok.Data;
 @Table(name = "Auth_CustomerUser", schema = "alanlee")
 @Data
 public class CustomerUserEntity {
-
 	@Id
-    // @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    // @GeneratedValue(generator = "system-uuid")
-	
+	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "system-uuid")
 	@Column(name = "UserUUID", unique = true, nullable = false)
 	private String userUUid;
 	private String userAccount;
@@ -34,10 +32,9 @@ public class CustomerUserEntity {
 	private String activatedStatus;
 	private String isFinishWholesale;
 	private String isPaidDeposit;
-	private Date LastLoginDt;
+	private Date lastLoginDt;
 	private String createUser;
 	private Date createDt;
 	private String updateUser;
 	private Date updateDt;
-	
 }

@@ -16,11 +16,9 @@ import lombok.Data;
 @Table(name = "Auth_SupplierUser", schema = "alanlee")
 @Data
 public class SupplierUserEntity {
-
 	@Id
-    // @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    // @GeneratedValue(generator = "system-uuid")
-	
+	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "system-uuid")
 	@Column(name = "UserUUID", unique = true, nullable = false)
 	private String userUUid;
 	private String userAccount;
@@ -33,5 +31,4 @@ public class SupplierUserEntity {
 	private Date createDt;
 	private String updateUser;
 	private Date updateDt;
-	
 }

@@ -8,16 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.peazy.auth.model.args.ChangePasswordRequest;
-import com.peazy.auth.model.args.QueryUserRequest;
-import com.peazy.auth.model.dto.QueryUserDto;
+import com.peazy.auth.model.args.CreateCustomerUserRequest;
+import com.peazy.auth.model.args.CreateSupplierUserRequest;
 import com.peazy.auth.model.entity.CustomerUserEntity;
 import com.peazy.auth.model.entity.SupplierUserEntity;
 import com.peazy.auth.service.interfaces.CustomerUserService;
@@ -47,4 +45,15 @@ public class UserController {
 		return ResponseEntity.ok(supplierUserList);
 	}
 
+	@PostMapping(value = "/createCustomerUser")
+	public ResponseEntity<?> createCustomerUser(@RequestBody CreateCustomerUserRequest request) {
+		customerUserService.createCustomerUser(request);
+		return ResponseEntity.ok(null);
+	}
+
+	@PostMapping(value = "/createSupplierUser")
+	public ResponseEntity<?> createSupplierUser(@RequestBody CreateSupplierUserRequest request) {
+		supplierUserService.createSupplierUser(request);
+		return ResponseEntity.ok(null);
+	}
 }
