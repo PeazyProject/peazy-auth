@@ -23,7 +23,7 @@ import com.peazy.auth.service.interfaces.SupplierUserService;
 
 @CrossOrigin
 @RestController
-@RequestMapping(path = "/user",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
