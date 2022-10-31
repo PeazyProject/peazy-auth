@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 public class JwtRequest implements Serializable {
