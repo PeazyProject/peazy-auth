@@ -9,10 +9,11 @@ import lombok.Data;
 public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = -4759388262050468119L;
-    @ApiModelProperty(example = "testaccount1")
+    @ApiModelProperty(example = "JayAccount1")
     private String userName;
-    @ApiModelProperty(example = "12345")
-    private String password;
+    @ApiModelProperty(example = "password")
+    private String userPassword;
+    @ApiModelProperty(example = "Jay@gmail.com")
     private String userEmail;
    
     // need default constructor for JSON Parsing
@@ -20,14 +21,14 @@ public class JwtRequest implements Serializable {
 
     }
 
-    public JwtRequest(String userName, String password) {
+    public JwtRequest(String userName, String userPassword) {
         this.setUserName(userName);
-        this.setPassword(password);
+        this.setUserPassword(userPassword);
     }
 
-    public JwtRequest(String userName, String password, String userEmail) {
+    public JwtRequest(String userName, String userPassword, String userEmail) {
 	    this.setUserName(userName);
-	    this.setPassword(password);
+	    this.setUserPassword(userPassword);
         this.setUserEmail(userEmail);
 	}
 }

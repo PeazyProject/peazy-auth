@@ -5,9 +5,11 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.security.auth.message.AuthException;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.peazy.auth.model.args.JwtRequest;
@@ -21,12 +23,13 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
-public class JwtTokenUtil implements Serializable{
-    
-    private static final long EXPIRATION_TIME = 1 * 60 * 1000;
+public class JwtTokenUtil implements Serializable {
 
-	private static final String CLAIM_NAME_USEREMAIL = "userEmail";
-	private static final String CLAIM_NAME_PASSWORD = "password";
+    private static final long EXPIRATION_TIME = 5 * 60 * 1000;
+
+    private static final String CLAIM_NAME_USEREMAIL = "userEmail";
+    private static final String CLAIM_NAME_USERNAME = "userName";
+    private static final String CLAIM_NAME_USERPASSWORD = "userPassword";
 
     /**
      * JWT SECRET KEY
@@ -36,14 +39,11 @@ public class JwtTokenUtil implements Serializable{
     /**
      * 簽發JWT
      */
-    public String generateToken(HashMap<String, String> userDetails, JwtRequest jwtRequest) {
+    public String generateToken(UserDetails userDetails, JwtRequest jwtRequest) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_NAME_USEREMAIL, userDetails.get("userEmail"));
-        claims.put(CLAIM_NAME_PASSWORD, userDetails.get("password"));
-        
-        // userDetails.getUsername()
-        String tmpUserName = "Jay";
-        return doGenerateToken(claims, tmpUserName);
+        claims.put(CLAIM_NAME_USERNAME, jwtRequest.getUserName());
+        claims.put(CLAIM_NAME_USERPASSWORD, jwtRequest.getUserPassword());
+        return doGenerateToken(claims, userDetails.getUsername());
     }
 
     public String doGenerateToken(Map<String, Object> claims, String subject) {
@@ -56,36 +56,37 @@ public class JwtTokenUtil implements Serializable{
                 .compact();
     }
 
-    public void validateToken(String token) throws AuthException {
-        try {
-            Jwts.parser().setSigningKey(SECRET)
-                    .parseClaimsJws(token);
-        } catch (SignatureException e) {
-            throw new AuthException("Invalid JWT signature.");
-        } catch (MalformedJwtException e) {
-            throw new AuthException("Invalid JWT token.");
-        } catch (ExpiredJwtException e) {
-            throw new AuthException("Expired JWT token.");
-        } catch (UnsupportedJwtException e) {
-            throw new AuthException("Unsupported JWT token.");
-        } catch (IllegalArgumentException e) {
-            throw new AuthException("JWT token compact of handler are invalid.");
-        }
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUserNameFromToken(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    private boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
 
+    private Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.getExpiration());
+    }
 
+    public String getUserNameFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get(CLAIM_NAME_USERNAME, String.class));
+    }
 
+    // test method
+    public String getUserEmailFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get(CLAIM_NAME_USEREMAIL, String.class));
+    }
 
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
 
+    // for retrieving any information from token we will need the secret key
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+    }
 
-
-
-
-
-
-
-
-
-    
 }
