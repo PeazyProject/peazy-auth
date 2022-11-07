@@ -9,7 +9,7 @@ import lombok.Data;
 public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = -4759388262050468119L;
-    @ApiModelProperty(example = "JayAccount1")
+    @ApiModelProperty(example = "Jay")
     private String userName;
     @ApiModelProperty(example = "password")
     private String userPassword;

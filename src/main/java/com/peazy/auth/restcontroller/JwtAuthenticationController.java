@@ -61,6 +61,7 @@ public class JwtAuthenticationController {
 
         logger.info("createAuthenticationToken authenticationRequest = {}", authenticationRequest);
         logger.info("email={}, password={}", authenticationRequest.getUserEmail(), authenticationRequest.getUserPassword());
+        logger.info("username={}, password={}", authenticationRequest.getUserName(), authenticationRequest.getUserPassword());
         // authenticate(authenticationRequest.getUserEmail(), authenticationRequest.getUserPassword());
         final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUserName());
 		if (userDetailsServiceImpl.checkUserPassword(authenticationRequest.getUserPassword(), userDetails.getPassword())) {
