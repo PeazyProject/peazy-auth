@@ -1,4 +1,4 @@
-package com.peazy.auth.model.resp;
+package com.peazy.auth.model.response;
 
 
 import java.io.Serializable;
