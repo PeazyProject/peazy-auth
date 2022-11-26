@@ -1,14 +1,14 @@
 package com.peazy.auth.restcontroller;
 
-import java.util.HashMap;
-
-import javax.security.auth.message.AuthException;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,44 +17,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.peazy.auth.configuration.JwtTokenUtil;
+import com.peazy.auth.model.args.CreateCustomerUserRequest;
 import com.peazy.auth.model.args.JwtRequest;
+import com.peazy.auth.model.entity.CustomerUserEntity;
+import com.peazy.auth.model.resp.AuthorizationResponse;
+import com.peazy.auth.model.resp.JwtResponse;
+import com.peazy.auth.model.resp.UserProfile;
+import com.peazy.auth.service.Impl.UserDetailsServiceImpl;
+import com.peazy.auth.service.interfaces.CustomerUserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping(path = "/", produces = "application/json")
 public class JwtAuthenticationController {
-    
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    
-    // @PostMapping("/login")
-    // public ResponseEntity<?> login(@RequestBody HashMap<String, String> user) {
-    //     JwtTokenUtil jwtToken = new JwtTokenUtil();
-    //     String token = jwtToken.generateToken(user); // 取得token
-    //     return ResponseEntity.status(HttpStatus.OK).body(token);
-    // }
 
-    // @PostMapping(value = "/authentication")
-    // public ResponseEntity createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    @Autowired
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
-    //     logger.info("createAuthenticationToken authenticationRequest = {}", authenticationRequest);
-    //     if (authenticationRequest.getUserName().contains("@")) {
-	// 		String redirectUrl = userDetailsService
-	// 				.getRedirectUrlFromEmail(authenticationRequest.getUserName().split("@")[1]);
-	// 		if (StringUtils.isNotEmpty(redirectUrl)) {
-	// 			JwtResponse resp = new JwtResponse("");
-	// 			resp.setRedirectUrl(redirectUrl);
-	// 			logger.info("createAuthenticationToken resp = {}", resp);
-	// 			return ResponseEntity.ok(resp);
-	// 		}
-	// 	}
-    //     String token = au.substring(6);
-    //     JwtTokenUtil jwtToken = new JwtTokenUtil();
-    //     try {
-    //         jwtToken.validateToken(token);
-    //     } catch (AuthException e) {
-    //         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-    //     }
-    //     return ResponseEntity.status(HttpStatus.OK).body("Hello CaiLi");
-    // }
+    @Autowired
+	private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private CustomerUserService customerUserService;
+
+    @PostMapping(value = "/authentication")
+    public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+        final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUserName());
+		if (userDetailsServiceImpl.checkUserPassword(authenticationRequest.getUserPassword(), userDetails.getPassword())) {
+			final String token = jwtTokenUtil.generateToken(userDetails, authenticationRequest);
+			return ResponseEntity.ok(new JwtResponse(token));
+		} else {
+			throw new Exception("Can't find the user");
+		}
+    }
+
+    @GetMapping(value = "/authorization")
+    public ResponseEntity<AuthorizationResponse> authorization(
+            @RequestHeader(name = "Authorization") String authorization) throws Exception {
+        String token = authorization.substring(7);
+        String username = jwtTokenUtil.getUserNameFromToken(token);
+        Optional<CustomerUserEntity> user = customerUserService.findByUserName(username);
+        logger.info("user={}", user);
+        if (user.isPresent()) {
+            UserProfile profile = new UserProfile();
+            BeanUtils.copyProperties(user.get(), profile);
+            AuthorizationResponse response = new AuthorizationResponse();
+            response.setUserProfile(profile);
+            return ResponseEntity.ok(response);
+        } else {
+            throw new Exception("Can't find the user");
+        }
+    }
+
+    @PostMapping(value = "/registerCustomerUser")
+	public ResponseEntity<CustomerUserEntity> saveUser(@RequestBody CreateCustomerUserRequest user) throws Exception {
+		return ResponseEntity.ok(userDetailsServiceImpl.save(user));
+	}
 
     @GetMapping(value = "/greeting")
     public String greeting() {

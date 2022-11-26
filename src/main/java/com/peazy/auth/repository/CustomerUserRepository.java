@@ -11,10 +11,12 @@ import com.peazy.auth.model.entity.CustomerUserEntity;
 public interface CustomerUserRepository extends JpaRepository<CustomerUserEntity, Long> {
 
 	
-	Optional<CustomerUserEntity> findByuserUUid(String uuid);
+	Optional<CustomerUserEntity> findByUserUUid(String uuid);
 	
 	Optional<CustomerUserEntity> findByUserAccount(String loginAccount);
 	
-	Optional<CustomerUserEntity> findByUserEmail(String email);
+	Optional<CustomerUserEntity> findByUserEmail(String userEmail);
+
+	Optional<CustomerUserEntity> findByUserName(String userName);
 
 }
