@@ -1,6 +1,7 @@
 package com.peazy.auth.service.Impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class CustomerUserServiceImpl implements CustomerUserService {
 		customerUserEntity.setUpdateUser(request.getUserName());
 		customerUserEntity.setUpdateDt(request.getCreateDt());
 		customerUserRepository.save(customerUserEntity);
+	}
+
+	@Override
+	public Optional<CustomerUserEntity> findByUserName(String username) {
+		return customerUserRepository.findByUserName(username);
 	}
 
 }

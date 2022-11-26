@@ -7,38 +7,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.security.auth.message.AuthException;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.peazy.auth.model.args.JwtRequest;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    private static final long EXPIRATION_TIME = 5 * 60 * 1000;
+	private static final long serialVersionUID = -2550185165626007488L;
+
+    private static final long EXPIRATION_TIME = 1 * 60 * 1000;
+
+    private static final String SECRET = "peazy";
 
     private static final String CLAIM_NAME_USEREMAIL = "userEmail";
     private static final String CLAIM_NAME_USERNAME = "userName";
     private static final String CLAIM_NAME_USERPASSWORD = "userPassword";
 
-    /**
-     * JWT SECRET KEY
-     */
-    private static final String SECRET = "peazy secret";
-
-    /**
-     * 簽發JWT
-     */
     public String generateToken(UserDetails userDetails, JwtRequest jwtRequest) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_NAME_USERNAME, jwtRequest.getUserName());
@@ -88,5 +78,14 @@ public class JwtTokenUtil implements Serializable {
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
+
+    public String doGenerateRefreshToken(String token,UserDetails userDetails) {
+		Claims claims = getAllClaimsFromToken(token);
+		return this.generateRefreshToken(claims, userDetails.getUsername());
+	}
+
+    public String generateRefreshToken(Map<String, Object> claims, String subject) {
+		return this.doGenerateToken(claims, subject);
+	}
 
 }

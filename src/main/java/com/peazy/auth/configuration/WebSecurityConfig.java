@@ -86,13 +86,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Set permissions on endpoints
 		http.authorizeRequests()
 				// Our public endpoints
-				.antMatchers("/authentication").permitAll()
-				.antMatchers("/greeting").permitAll()
+				.antMatchers("/authentication", "/user/createCustomerUser").permitAll()
+				.antMatchers(HttpMethod.OPTIONS).permitAll()
 				// .antMatchers(HttpMethod.GET, "/api/**").permitAll()
 				// .antMatchers(HttpMethod.POST, "/api/**").permitAll()
 
 				// Our private endpoints
 				.anyRequest().authenticated();
+				// .and().httpBasic().and().cors().and().
+				// exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				// .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		// Add JWT token filter
 		http.addFilterBefore(
