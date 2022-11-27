@@ -20,9 +20,9 @@ import com.peazy.auth.configuration.JwtTokenUtil;
 import com.peazy.auth.model.args.CreateCustomerUserRequest;
 import com.peazy.auth.model.args.JwtRequest;
 import com.peazy.auth.model.entity.CustomerUserEntity;
-import com.peazy.auth.model.resp.AuthorizationResponse;
-import com.peazy.auth.model.resp.JwtResponse;
-import com.peazy.auth.model.resp.UserProfile;
+import com.peazy.auth.model.response.AuthorizationResponse;
+import com.peazy.auth.model.response.JwtResponse;
+import com.peazy.auth.model.response.UserProfile;
 import com.peazy.auth.service.Impl.UserDetailsServiceImpl;
 import com.peazy.auth.service.interfaces.CustomerUserService;
 
