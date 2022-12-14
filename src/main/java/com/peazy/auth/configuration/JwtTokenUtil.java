@@ -21,7 +21,7 @@ public class JwtTokenUtil implements Serializable {
 
 	private static final long serialVersionUID = -2550185165626007488L;
 
-    private static final long EXPIRATION_TIME = 1 * 30 * 1000;
+    private static final long EXPIRATION_TIME = 1 * 60 * 30000;
 
     private static final String SECRET = "peazy";
 
