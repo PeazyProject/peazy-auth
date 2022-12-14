@@ -9,51 +9,26 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.peazy.auth.model.args.CreateCustomerUserRequest;
-import com.peazy.auth.model.args.CreateSupplierUserRequest;
-import com.peazy.auth.model.entity.CustomerUserEntity;
-import com.peazy.auth.model.entity.SupplierUserEntity;
-import com.peazy.auth.service.interfaces.CustomerUserService;
-import com.peazy.auth.service.interfaces.SupplierUserService;
+import com.peazy.auth.model.entity.UserEntity;
+import com.peazy.auth.service.interfaces.UserService;
 
 @CrossOrigin
 @RestController
 @RequestMapping(path = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	private CustomerUserService customerUserService;
 
 	@Autowired
-	private SupplierUserService supplierUserService;
+	private UserService userService;
 
-	@PostMapping(value = "/getCustomerUsers")
-	public ResponseEntity<List<CustomerUserEntity>> getCustomerUsers() throws JsonProcessingException {
-		List<CustomerUserEntity> customerUserList = customerUserService.getUsers();
-		return ResponseEntity.ok(customerUserList);
+	@PostMapping(value = "/getUser")
+	public ResponseEntity<List<UserEntity>> getUser() throws JsonProcessingException {
+		List<UserEntity> userList = userService.getUser();
+		return ResponseEntity.ok(userList);
 	}
 
-	@PostMapping(value = "/getSupplierUsers")
-	public ResponseEntity<List<SupplierUserEntity>> getSupplierUsers() throws JsonProcessingException {
-		List<SupplierUserEntity> supplierUserList = supplierUserService.getUsers();
-		return ResponseEntity.ok(supplierUserList);
-	}
-
-	@PostMapping(value = "/createCustomerUser")
-	public ResponseEntity<?> createCustomerUser(@RequestBody CreateCustomerUserRequest request) {
-		customerUserService.createCustomerUser(request);
-		return ResponseEntity.ok(null);
-	}
-
-	@PostMapping(value = "/createSupplierUser")
-	public ResponseEntity<?> createSupplierUser(@RequestBody CreateSupplierUserRequest request) {
-		supplierUserService.createSupplierUser(request);
-		return ResponseEntity.ok(null);
-	}
 }

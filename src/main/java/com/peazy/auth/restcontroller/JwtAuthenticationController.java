@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.peazy.auth.configuration.JwtTokenUtil;
-import com.peazy.auth.model.args.CreateCustomerUserRequest;
+import com.peazy.auth.model.args.CreateUserRequest;
 import com.peazy.auth.model.args.JwtRequest;
-import com.peazy.auth.model.entity.CustomerUserEntity;
+import com.peazy.auth.model.entity.UserEntity;
 import com.peazy.auth.model.response.AuthorizationResponse;
 import com.peazy.auth.model.response.JwtResponse;
 import com.peazy.auth.model.response.UserProfile;
 import com.peazy.auth.service.Impl.UserDetailsServiceImpl;
-import com.peazy.auth.service.interfaces.CustomerUserService;
+import com.peazy.auth.service.interfaces.UserService;
 
 @RestController
 @CrossOrigin
@@ -40,7 +40,7 @@ public class JwtAuthenticationController {
 	private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private CustomerUserService customerUserService;
+    private UserService userService;
 
     @PostMapping(value = "/authentication")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -58,10 +58,10 @@ public class JwtAuthenticationController {
             @RequestHeader(name = "Authorization") String authorization) throws Exception {
         String token = authorization.substring(7);
         String username = jwtTokenUtil.getUserNameFromToken(token);
-        Optional<CustomerUserEntity> user = customerUserService.findByUserName(username);
+        Optional<UserEntity> user = userService.findByUserName(username);
         logger.info("user={}", user);
         if (user.isPresent()) {
-            UserProfile profile = new UserProfile();
+            UserProfile profile = new UserProfile(); // TO-DO修改UserProfile
             BeanUtils.copyProperties(user.get(), profile);
             AuthorizationResponse response = new AuthorizationResponse();
             response.setUserProfile(profile);
@@ -71,8 +71,8 @@ public class JwtAuthenticationController {
         }
     }
 
-    @PostMapping(value = "/registerCustomerUser")
-	public ResponseEntity<CustomerUserEntity> saveUser(@RequestBody CreateCustomerUserRequest user) throws Exception {
+    @PostMapping(value = "/createUser")
+	public ResponseEntity<UserEntity> createUser(@RequestBody CreateUserRequest user) throws Exception {
 		return ResponseEntity.ok(userDetailsServiceImpl.save(user));
 	}
 

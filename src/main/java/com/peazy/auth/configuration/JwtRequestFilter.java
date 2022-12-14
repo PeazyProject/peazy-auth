@@ -40,16 +40,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        logger.info("Start to get authorization header and validate...");
+        logger.debug("Start to get authorization header and validate...");
         // Get authorization header and validate
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isEmpty(header) || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
-        logger.info("Finish...");
+        logger.debug("Finish...");
 
-        logger.info("Start to get jwt token and validate...");
+        logger.debug("Start to get jwt token and validate...");
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
         String username = null;
@@ -67,9 +67,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        logger.info("Finish...");
+        logger.debug("Finish...");
 
-        logger.info("Start to get user identity and set it on the spring security context...");
+        logger.debug("Start to get user identity and set it on the spring security context...");
         // Get user identity and set it on the spring security context
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,
@@ -79,10 +79,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.info("here={" + token + "}");
+        logger.debug("token={" + token + "}");
         response.setHeader("Access-Control-Expose-Headers", "RefreshToken");
 		response.setHeader("RefreshToken", jwtTokenUtil.doGenerateRefreshToken(token, userDetails));
-        logger.info("Finish...");
+        logger.debug("Finish...");
         chain.doFilter(request, response);
     }
 }   
