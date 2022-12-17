@@ -35,6 +35,7 @@ public class UserEntity {
 	private String userType;
 	private Date lastLoginDt;
 	private Date lastLogoutDt;
+	private String isInvoice;
 	private String createUser;
 	private Date createDt;
 	private String updateUser;

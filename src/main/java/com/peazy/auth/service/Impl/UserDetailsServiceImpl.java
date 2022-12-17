@@ -53,6 +53,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         newUser.setUserPassword(bcryptEncoder.encode(request.getUserPassword()));
         newUser.setCreateUser(request.getUserName());
         newUser.setUpdateUser(request.getUserName());
+
+        newUser.setLoginErrorCnt("0");
+        newUser.setActivatedStatus("0");
+        newUser.setIsFinishWholesale("0");
+        newUser.setIsPaidDeposit("0");
+        newUser.setIsInvoice("N");
+
         Date currentDateTime = new Date();
         newUser.setCreateDt(currentDateTime);
         newUser.setUpdateDt(currentDateTime);
