@@ -56,8 +56,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         newUser.setLoginErrorCnt("0");
         newUser.setActivatedStatus("0");
-        newUser.setIsFinishWholesale("0");
-        newUser.setIsPaidDeposit("0");
+        newUser.setIsFinishWholesale("N");
+        newUser.setIsPaidDeposit("N");
         newUser.setIsInvoice("N");
 
         Date currentDateTime = new Date();
