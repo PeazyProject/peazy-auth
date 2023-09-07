@@ -19,15 +19,15 @@ public class UserEntity {
 	@Id
 	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
 	@GeneratedValue(generator = "system-uuid")
-	@Column(name = "UserUUID", unique = true, nullable = false)
-	private String userUUid;
-	private String userAccount;
-	private String userName;
-	private String userPassword;
-	private String userEmail;
-	private String userPhoneNumber;
-	private String userStoreName;
-	private String userAddress;
+	@Column(name = "UUID", unique = true, nullable = false)
+	private String uuid;
+	private String account;
+	private String name;
+	private String password;
+	private String email;
+	private String phoneNumber;
+	private String storeName;
+	private String address;
 	private String loginErrorCnt;
 	private String activatedStatus;
 	private String isFinishWholesale;

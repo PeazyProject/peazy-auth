@@ -1,4 +1,4 @@
-package com.peazy.auth.service.Impl;
+package com.peazy.auth.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +25,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Optional<UserEntity> findByUserName(String username) {
-		return userRepository.findByUserName(username);
+		return userRepository.findByName(username);
 	}
 
 	@Override
 	public Optional<UserEntity> findByUserEmail(String email) {
-		return userRepository.findByUserEmail(email);
+		return userRepository.findByEmail(email);
 	}
 
 }

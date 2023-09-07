@@ -31,7 +31,7 @@ public class JwtTokenUtil implements Serializable {
 
     public String generateToken(UserDetails userDetails, JwtRequest jwtRequest) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_NAME_USERNAME, jwtRequest.getUserName());
+        claims.put(CLAIM_NAME_USEREMAIL, jwtRequest.getUserEmail());
         claims.put(CLAIM_NAME_USERPASSWORD, jwtRequest.getUserPassword());
         return doGenerateToken(claims, userDetails.getUsername());
     }
@@ -49,6 +49,11 @@ public class JwtTokenUtil implements Serializable {
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUserNameFromToken(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    public boolean validateTokenByEmail(String token, UserDetails userDetails) {
+        final String email = getUserEmailFromToken(token);
+        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

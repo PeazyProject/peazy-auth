@@ -10,8 +10,8 @@ import com.peazy.auth.model.entity.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     
-    Optional<UserEntity> findByUserEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
-    Optional<UserEntity> findByUserName(String userName);
+    Optional<UserEntity> findByName(String name);
 
 }

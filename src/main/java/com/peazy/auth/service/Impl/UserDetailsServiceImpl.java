@@ -1,4 +1,4 @@
-package com.peazy.auth.service.Impl;
+package com.peazy.auth.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,29 +28,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserEntity> userOptional = userRepository.findByUserName(username);
+        Optional<UserEntity> userOptional = userRepository.findByName(username);
         if (userOptional.isPresent()) {
-            return new User(userOptional.get().getUserName(),
-            userOptional.get().getUserPassword(),
+            return new User(userOptional.get().getName(),
+            userOptional.get().getPassword(),
             new ArrayList<>());
         }
         throw new UsernameNotFoundException("User not found with username: " + username);
     }
 
-    public UserDetails loadUserByUseremail(String userEmail) throws UsernameNotFoundException {
-        Optional<UserEntity> userOptional = userRepository.findByUserEmail(userEmail);
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
-            return new User(userOptional.get().getUserAccount(),
-            userOptional.get().getUserPassword(),
+            return new User(userOptional.get().getEmail(),
+            userOptional.get().getPassword(),
             new ArrayList<>());
         }
-        throw new UsernameNotFoundException("User not found with userEmail: " + userEmail);
+        throw new UsernameNotFoundException("User not found with user email: " + email);
     }
 
     public UserEntity save(CreateUserRequest request) {
         UserEntity newUser = new UserEntity();
         BeanUtils.copyProperties(request, newUser);
-        newUser.setUserPassword(bcryptEncoder.encode(request.getUserPassword()));
+        newUser.setPassword(bcryptEncoder.encode(request.getUserPassword()));
         newUser.setCreateUser(request.getUserName());
         newUser.setUpdateUser(request.getUserName());
 

@@ -23,9 +23,12 @@ import com.peazy.auth.model.entity.UserEntity;
 import com.peazy.auth.model.response.AuthorizationResponse;
 import com.peazy.auth.model.response.JwtResponse;
 import com.peazy.auth.model.response.UserProfile;
-import com.peazy.auth.service.Impl.UserDetailsServiceImpl;
+import com.peazy.auth.service.impl.UserDetailsServiceImpl;
+import com.peazy.auth.service.interfaces.JwtAuthenticationService;
 import com.peazy.auth.service.interfaces.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/", produces = "application/json")
@@ -42,9 +45,12 @@ public class JwtAuthenticationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtAuthenticationService jwtAuthenticationService;
+
     @PostMapping(value = "/authentication")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUserName());
+        final UserDetails userDetails = userDetailsServiceImpl.loadUserByEmail(authenticationRequest.getUserEmail());
 		if (userDetailsServiceImpl.checkUserPassword(authenticationRequest.getUserPassword(), userDetails.getPassword())) {
 			final String token = jwtTokenUtil.generateToken(userDetails, authenticationRequest);
 			return ResponseEntity.ok(new JwtResponse(token));
@@ -56,19 +62,7 @@ public class JwtAuthenticationController {
     @GetMapping(value = "/authorization")
     public ResponseEntity<AuthorizationResponse> authorization(
             @RequestHeader(name = "Authorization") String authorization) throws Exception {
-        String token = authorization.substring(7);
-        String username = jwtTokenUtil.getUserNameFromToken(token);
-        Optional<UserEntity> user = userService.findByUserName(username);
-        logger.info("user={}", user);
-        if (user.isPresent()) {
-            UserProfile profile = new UserProfile(); // TO-DO修改UserProfile
-            BeanUtils.copyProperties(user.get(), profile);
-            AuthorizationResponse response = new AuthorizationResponse();
-            response.setUserProfile(profile);
-            return ResponseEntity.ok(response);
-        } else {
-            throw new Exception("Can't find the user");
-        }
+        return jwtAuthenticationService.authorization(authorization);
     }
 
     @PostMapping(value = "/createUser")

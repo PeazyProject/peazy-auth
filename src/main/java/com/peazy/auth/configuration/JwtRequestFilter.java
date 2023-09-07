@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.peazy.auth.service.Impl.UserDetailsServiceImpl;
+import com.peazy.auth.service.impl.UserDetailsServiceImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -52,19 +52,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         logger.debug("Start to get jwt token and validate...");
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
-        String username = null;
+        String email = null;
         UserDetails userDetails = null;
         try {
-            username = jwtTokenUtil.getUserNameFromToken(token);
-            logger.info("username={}", username);
-            userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+            email = jwtTokenUtil.getUserEmailFromToken(token);
+            logger.info("email={}", email);
+            userDetails = userDetailsServiceImpl.loadUserByEmail(email);
         } catch (IllegalArgumentException e) {
             System.out.println("Unable to get JWT Token");
         } catch (ExpiredJwtException ex) {
             logger.error(ExceptionUtils.getStackTrace(ex));
             logger.debug("JWT Token has expired");
         }
-        if (!jwtTokenUtil.validateToken(token, userDetails)) {
+        if (!jwtTokenUtil.validateTokenByEmail(token, userDetails)) {
             chain.doFilter(request, response);
             return;
         }
