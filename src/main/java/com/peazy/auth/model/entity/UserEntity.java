@@ -26,7 +26,7 @@ public class UserEntity {
 	private String password;
 	private String email;
 	private String phoneNumber;
-	private String storeName;
+	private String wholesalerSeqNo;
 	private String address;
 	private String loginErrorCnt;
 	private String activatedStatus;
